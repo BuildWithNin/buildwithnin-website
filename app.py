@@ -53,20 +53,24 @@ st.markdown("""
         margin-bottom: 1.5rem;
     }
     
-    /* Form Inputs */
+    /* Form Inputs & Placeholders */
     .stTextInput input {
         background-color: #20252B !important;
         color: #FFFFFF !important;
         border: 1px solid #333D48 !important;
         border-radius: 8px !important;
     }
+    .stTextInput input::placeholder {
+        color: #A3AEBA !important; /* Brighter gray for better mobile visibility */
+        opacity: 1 !important;
+    }
     .stTextInput input:focus {
         border: 1px solid #8AE917 !important;
         box-shadow: 0 0 10px rgba(138, 233, 23, 0.3) !important;
     }
 
-    /* Buttons */
-    .stButton > button, div[data-testid="stLinkButton"] > a {
+    /* Standard Buttons (Social Links) */
+    div[data-testid="stLinkButton"] > a {
         background-color: #20252B !important;
         color: #8AE917 !important;
         border: 1.5px solid #8AE917 !important;
@@ -74,10 +78,26 @@ st.markdown("""
         font-weight: 600 !important;
         transition: all 0.25s ease-in-out !important;
     }
-    .stButton > button:hover, div[data-testid="stLinkButton"] > a:hover {
+    div[data-testid="stLinkButton"] > a:hover {
         background-color: #8AE917 !important;
         color: #16191D !important;
         box-shadow: 0 0 15px rgba(138, 233, 23, 0.4) !important;
+        transform: translateY(-1px);
+    }
+    
+    /* Highlight the Form Submit Button (Make it POP on mobile) */
+    div[data-testid="stForm"] .stButton > button {
+        background-color: #8AE917 !important;
+        color: #16191D !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem !important;
+        transition: all 0.25s ease-in-out !important;
+    }
+    div[data-testid="stForm"] .stButton > button:hover {
+        background-color: #9DF72C !important;
+        box-shadow: 0 0 15px rgba(138, 233, 23, 0.6) !important;
         transform: translateY(-1px);
     }
 
@@ -109,7 +129,7 @@ st.markdown("""
 col1, col2, col3 = st.columns([1, 4, 1])
 with col2:
     try:
-        # Looking for logo.png now!
+        # Looking for logo.png
         st.image("logo.png")
     except:
         st.markdown("<h1 class='brand-title'>Build With Nin</h1>", unsafe_allow_html=True)
@@ -120,7 +140,7 @@ with col2:
     # Social Channels
     sc1, sc2 = st.columns(2)
     with sc1:
-        st.link_button("📸 Instagram", "https://instagram.com/buildwithnin", use_container_width=True)
+        st.link_button("📸 Instagram", "https://instagram.com/buildiwthnin", use_container_width=True)
     with sc2:
         st.link_button("🎵 TikTok", "https://tiktok.com/@buildwithnin", use_container_width=True)
 
@@ -136,11 +156,20 @@ with col_e2:
     st.markdown("<p style='text-align: center; color: #9BA3AF;'>Get the newest zero-code AI tool sent to your inbox every Sunday.</p>", unsafe_allow_html=True)
     
     with st.form("email_capture_form", clear_on_submit=True):
-        email_input = st.text_input("Email Address", placeholder="nin@example.com", label_visibility="collapsed")
+        email_input = st.text_input("Email Address", placeholder="your.email@example.com", label_visibility="collapsed")
+        
+        # Anti-Spam Bot Check
+        bot_check = st.text_input("Bot Check", placeholder="Prove you're human: What is 3 + 4?", label_visibility="collapsed")
+        
         submit_button = st.form_submit_button("Get Free Prompts Weekly", use_container_width=True)
         
         if submit_button:
-            if email_input and re.match(r"[^@]+@[^@]+\.[^@]+", email_input):
+            # 1. Check if they passed the bot test
+            if bot_check.strip() != "7":
+                st.error("🚨 Bot check failed. Please answer the math question correctly to join.")
+            
+            # 2. Check if the email is valid
+            elif email_input and re.match(r"[^@]+@[^@]+\.[^@]+", email_input):
                 if GSheetsConnection is not None:
                     try:
                         conn = st.connection("gsheets", type=GSheetsConnection)
@@ -211,6 +240,31 @@ Requirements:
 * Ignore shortcut files (.lnk, .url) and existing directories.
 * Execute silently in under 2 seconds when double-clicking organize.bat."""
     st.code(prompt_3, language="markdown")
+
+# Vault Item 4: Website Generator Prompt
+with st.expander("💻 The 5-Minute AI Website Prompt", expanded=False):
+    st.markdown("**Tool Description:** The exact prompt used to generate the sleek, dark-mode BuildWithNin landing page with an email capture form.")
+    st.markdown("**The Prompt:**")
+    prompt_4 = """Role: You are an expert Python developer and UI/UX designer.
+Task: Write a single-page website using Python and Streamlit.
+Requirements:
+* Design: Dark mode background (#16191D) with cyber-neon green accents (#8AE917). Hide default Streamlit menus using CSS. 
+* Sections: A hero section with an image logo and social links. An email capture form that drops balloons on success. A "Prompt Vault" using st.expander to hide/reveal text.
+* Database: Include the boilerplate code to connect the email form to a Google Sheet using st.connection."""
+    st.code(prompt_4, language="markdown")
+
+# --- TEMPLATE FOR FUTURE PROMPTS ---
+# To add a new prompt, simply uncomment the code below (remove the '#' symbols) and fill in your details!
+#
+# with st.expander("🔥 [NEW TOOL NAME HERE]", expanded=False):
+#     st.markdown("**Tool Description:** [1 sentence describing what it does]")
+#     st.markdown("**The Prompt:**")
+#     new_prompt = """
+# Role: 
+# Task: 
+# Requirements:
+#     """
+#     st.code(new_prompt, language="markdown")
 
 st.write("")
 st.markdown("<p style='text-align: center; color: #556070; font-size: 0.8rem;'>© 2026 BuildWithNin. All rights reserved.</p>", unsafe_allow_html=True)
