@@ -85,18 +85,24 @@ st.markdown("""
         transform: translateY(-1px);
     }
     
-    /* Highlight the Form Submit Button (Make it POP on mobile) */
-    div[data-testid="stForm"] .stButton > button {
+    /* Highlight the Form Submit Button (Aggressive Overrides) */
+    div[data-testid="stFormSubmitButton"] button {
         background-color: #8AE917 !important;
-        color: #16191D !important;
-        border: none !important;
+        border: 1px solid #8AE917 !important;
         border-radius: 8px !important;
-        font-weight: 800 !important;
-        font-size: 1.1rem !important;
         transition: all 0.25s ease-in-out !important;
     }
-    div[data-testid="stForm"] .stButton > button:hover {
+    /* Force the text inside the button to be dark */
+    div[data-testid="stFormSubmitButton"] button p, 
+    div[data-testid="stFormSubmitButton"] button span {
+        color: #16191D !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem !important;
+    }
+    /* Hover effects for the submit button */
+    div[data-testid="stFormSubmitButton"] button:hover {
         background-color: #9DF72C !important;
+        border: 1px solid #9DF72C !important;
         box-shadow: 0 0 15px rgba(138, 233, 23, 0.6) !important;
         transform: translateY(-1px);
     }
@@ -140,7 +146,7 @@ with col2:
     # Social Channels
     sc1, sc2 = st.columns(2)
     with sc1:
-        st.link_button("📸 Instagram", "https://instagram.com/buildiwthnin", use_container_width=True)
+        st.link_button("📸 Instagram", "https://instagram.com/buildwithnin", use_container_width=True)
     with sc2:
         st.link_button("🎵 TikTok", "https://tiktok.com/@buildwithnin", use_container_width=True)
 
@@ -252,19 +258,6 @@ Requirements:
 * Sections: A hero section with an image logo and social links. An email capture form that drops balloons on success. A "Prompt Vault" using st.expander to hide/reveal text.
 * Database: Include the boilerplate code to connect the email form to a Google Sheet using st.connection."""
     st.code(prompt_4, language="markdown")
-
-# --- TEMPLATE FOR FUTURE PROMPTS ---
-# To add a new prompt, simply uncomment the code below (remove the '#' symbols) and fill in your details!
-#
-# with st.expander("🔥 [NEW TOOL NAME HERE]", expanded=False):
-#     st.markdown("**Tool Description:** [1 sentence describing what it does]")
-#     st.markdown("**The Prompt:**")
-#     new_prompt = """
-# Role: 
-# Task: 
-# Requirements:
-#     """
-#     st.code(new_prompt, language="markdown")
 
 st.write("")
 st.markdown("<p style='text-align: center; color: #556070; font-size: 0.8rem;'>© 2026 BuildWithNin. All rights reserved.</p>", unsafe_allow_html=True)
